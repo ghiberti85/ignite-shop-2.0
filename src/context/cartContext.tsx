@@ -25,16 +25,24 @@ interface CartContextProviderProps {
 export function CartContextProvider({ children }: CartContextProviderProps) {
     const [items, setItems] = useState([] as Item[])
     
-    function addItem() {
+    function addItem(item: Item) {
+        const itemsAlreadyExists = items.find(
+            (cartItem) => cartItem.priceId === item.priceId,
+        )
 
+        if(!itemsAlreadyExists) {
+            setItems((state) => [...state, item])
+        }
     }
 
-    function removeItem() {
-
+    function removeItem(priceId: string) {
+        const filteredItems = items.filter(
+            (cartItem) => cartItem.priceId !== priceId,
+        )
     }
 
     function clear() {
-
+        setItems([])
     }
 
     return (
