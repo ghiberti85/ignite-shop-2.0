@@ -39,6 +39,8 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
         const filteredItems = items.filter(
             (cartItem) => cartItem.priceId !== priceId,
         )
+
+        setItems(filteredItems)
     }
 
     function clear() {
