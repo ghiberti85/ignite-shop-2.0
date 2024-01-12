@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { styled } from ".."
+import { keyframes, styled } from ".."
 
 
 export const CartTrigger = styled(Dialog.Trigger, {
@@ -12,6 +12,57 @@ export const CartTrigger = styled(Dialog.Trigger, {
     border: 0,
     borderRadius: 6,
     background: '$gray800',
+    color: '$gray400',
+    cursor: 'pointer',
+
+    span: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        top: -8,
+        right: -8,
+        width: 30,
+        height: 30,
+        background: '$green500',
+        border: '3px solid $gray900',
+        borderRadius: 9999,
+        color: '$white',
+        fontSize: '$xs',
+        fontWeight: 'bold',
+    },
+})
+
+const contentShow = keyframes({
+    '0%': { opacity: 0, transform: 'translate(16px, 0)' },
+    '100%': { opacity: 1, transform: 'translate(0, 0)'},
+})
+
+export const CartContent = styled(Dialog.Content, {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    justifyContent: 'space-between',
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 100,
+    width: '100%',
+    maxWidth: 480,
+    padding: '4.5rem 3rem 3rem',
+    background: '$gray800',
+    boxShadow: '-4px 0px 30px rgba(0, 0, 0, 0.8)',
+    color: '$gray100',
+    animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
+})
+
+export const CartClose = styled(Dialog.Close, {
+    position: 'absolute',
+    top: 24,
+    right: 24,
+    border: 0,
+    background: 'transparent',
     color: '$gray400',
     cursor: 'pointer',
 })
