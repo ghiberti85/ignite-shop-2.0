@@ -24,6 +24,7 @@ export const Product = styled('div', {
     },
 
     footer: {
+        display: 'flex',
         position: 'absolute',
         bottom: '0.25rem',
         left: '0.25rem',
