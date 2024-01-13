@@ -1,62 +1,55 @@
 import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product"
 import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/image"
+import Head from "next/head";
 import Stripe from "stripe"
 import { stripe } from "../../lib/stripe";
-import axios from "axios";
-import { useState } from "react";
-import Head from "next/head";
+import { useContext } from "react";
+import { CartContext } from "@/context/cartContext";
+import { priceFormatter } from "../../../utils/priceFormatter";
+import { Button } from "@/styles/components/button";
 
 interface ProductProps {
-    product: {
-        id: string;
-        name: string;
-        imageUrl: string;
-        price: string;
-        description: string;
-        defaultPriceId: string;
-    }
+    name: string
+    description: string
+    imageUrl: string
+    priceId: string
+    unitAmount: number
 }
 
-export default function Product({ product }: ProductProps) {
-    const [ isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+export default function Product({ name, description, imageUrl, priceId, unitAmount }: ProductProps) {
+    const { addItem } = useContext(CartContext)
 
-    async function handleBuyProduct() {
-        try {
-            setIsCreatingCheckoutSession(true);
-            const response = await axios.post('/api/checkout', {
-                priceId: product.defaultPriceId,
-            })
-            const { checkoutUrl } = response.data;
-
-            window.location.href = checkoutUrl;
-        } catch (err) {
-            //Conectar a uma ferramenta de observabilidade (Datadog/ Sentry)
-
-            setIsCreatingCheckoutSession(false);
-
-            alert('Falha ao redirecionar ao checkout!')
-        }
+    function handleAddToCart() {
+        addItem({
+            name,
+            imageUrl,
+            priceId,
+            unitAmount,
+        })
     }
+
+
     return (
         <>
             <Head>
-                <title>{product.name} | Ignite Shop</title>
+                <title>{`${name} | Ignite Shop`}</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
 
             <ProductContainer>
                 <ImageContainer>
-                    <Image src={product.imageUrl} width={520} height={480} alt="" />
+                    <Image src={imageUrl} width={520} height={480} alt="" />
                 </ImageContainer>
                 <ProductDetails>
-                    <h1>{product.name}</h1>
-                    <span>{product.price}</span>
+                    <h1>{name}</h1>
+                    <span>{priceFormatter.format(Number(unitAmount) / 100)}</span>
 
-                    <p>{product.description}</p>
+                    <p>{description}</p>
 
-                    <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
+                    <Button onClick={handleAddToCart}>
                         Comprar agora
-                    </button>
+                    </Button>
                 </ProductDetails>
             </ProductContainer>
             </>
@@ -64,16 +57,24 @@ export default function Product({ product }: ProductProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+    const response = await stripe.products.list({ active: true })
+    const products = response.data
+    const paths = products.map((product) => {
+        return {
+            params: {
+                id: product.id,
+            },
+        }
+    })
+
     return {
-        paths: [
-            { params: { id: 'prod_P6Y8bAoIyt8Hjq' } }
-        ],
+        paths,
         fallback: 'blocking',
     }
 }
 
 export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ params }) => {
-    const productId = params.id;
+    const productId = params?.id as string;
 
     const product = await stripe.products.retrieve(productId, {
         expand: ['default_price'],
@@ -83,18 +84,12 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
 
     return {
         props: {
-            product: {
-                id: product.id,
                 name: product.name,
-                imageUrl: product.images[0],
-                price: new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                }).format(price.unit_amount / 100),
                 description: product.description,
-                defaultPriceId: price.id,
-            }
+                imageUrl: product.images[0],
+                priceId: price.id,
+                unitAmount: price.unit_amount,
         },
-        revalidate: 60 * 60 * 1, // 1 hour
+        revalidate: 60 * 60 * 1, // 2 hours in seconds
     }
 }
