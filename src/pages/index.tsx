@@ -42,8 +42,8 @@ export default function Home({ products }: HomeProps) {
                                 <Image src={product.imageUrl} width={520} height={480} alt=""/>
                                 <footer>
                                     <strong>{product.name}</strong>
-                                    <span>{product.price}</span>
-                                    <Handbag size={24} weight="bold" />
+                                    <span>{product.price}</span>                                    
+                                    <div><Handbag size={24} weight="bold" /></div>
                                 </footer>
                             </Product>
                         </Link>

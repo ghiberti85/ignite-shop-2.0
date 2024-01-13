@@ -1,3 +1,4 @@
+import { BlockList } from "net";
 import { styled } from "..";
 
 export const HomeContainer = styled('main', {
@@ -31,7 +32,6 @@ export const Product = styled('div', {
 
         borderRadius: 6,
 
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
 
@@ -51,6 +51,20 @@ export const Product = styled('div', {
             fontWeight: 'bold',
             color: '$green300',
         },
+
+        div: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            width: '3rem',
+            height: '3rem',
+            border: 0,
+            borderRadius: 6,
+            background: '$green500',
+            color: '$white',
+            cursor: 'pointer',
+        }
     },
 
     '&:hover': {
