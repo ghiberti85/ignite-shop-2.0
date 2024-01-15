@@ -86,7 +86,7 @@ export function Cart() {
                         <section>
                             <div>
                                 <span>Quantidade</span>
-                                <span>{items.length}</span>
+                                <span>{items.length} item(s)</span>
                             </div>
 
                             <div>
@@ -99,7 +99,7 @@ export function Cart() {
                             disabled={isCreatingCheckoutSession}
                             onClick={handleBuyProduct}
                         >
-                            Finalizar a compra
+                            Finalizar compra
                         </Button>
                     </TotalsContainer>
                 </CartContent>

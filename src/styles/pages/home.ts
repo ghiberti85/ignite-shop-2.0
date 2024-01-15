@@ -24,37 +24,41 @@ export const Product = styled('div', {
     },
 
     footer: {
-        display: 'flex',
         position: 'absolute',
         bottom: '0.25rem',
         left: '0.25rem',
         right: '0.25rem',
-        padding: '2rem',
+        padding: '1.25rem',
 
         borderRadius: 6,
 
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
 
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
 
-        transform: 'translateY(110%)',
-        opacity: 0,
+        /* transform: 'translateY(110%)', */
+        opacity: 1,
         transition: 'all 0.2s ease-in-out',
 
-        strong: {
-            fontSize: '$lg',
-            color: '$gray100',
-        },
-
-        span: {
-            fontSize: '$xl',
-            fontWeight: 'bold',
-            color: '$green300',
-        },
-
         div: {
-            display: 'flex',
+
+            display:'grid',
+
+            strong: {
+                fontSize: '$lg',
+                color: '$gray100',
+            },
+    
+            span: {
+                fontSize: '$xl',
+                fontWeight: 'bold',
+                color: '$green300',
+            },
+        },
+
+        button: {
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',

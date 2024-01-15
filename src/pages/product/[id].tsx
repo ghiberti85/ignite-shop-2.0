@@ -48,7 +48,7 @@ export default function Product({ name, description, imageUrl, priceId, unitAmou
                     <p>{description}</p>
 
                     <Button onClick={handleAddToCart}>
-                        Comprar agora
+                        Colocar na Sacola
                     </Button>
                 </ProductDetails>
             </ProductContainer>
